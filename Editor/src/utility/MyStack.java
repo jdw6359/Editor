@@ -1,5 +1,5 @@
 package utility;
-import commands.Command;
+import commands.UndoableCommand;
 /**
  * 
  * @author Josh Woodward
@@ -10,8 +10,8 @@ import commands.Command;
  */
 public class MyStack{
 	
-	Command top;
-	Command bottom;
+	UndoableCommand top;
+	UndoableCommand bottom;
 	
 	
 	//initializes components to 
@@ -26,7 +26,7 @@ public class MyStack{
 	 * @param command Command to be added
 	 * to the structure
 	 */
-	public void add(Command command){
+	public void add(UndoableCommand command){
 		bottom=top;
 		top=command;
 		System.out.println("Command Added to top");
@@ -37,8 +37,8 @@ public class MyStack{
 	 * @return Command, the top 
 	 * element 
 	 */
-	public Command pop(){
-		Command ret=top;
+	public UndoableCommand pop(){
+		UndoableCommand ret=top;
 		top=bottom;
 		bottom=null;
 		return ret;

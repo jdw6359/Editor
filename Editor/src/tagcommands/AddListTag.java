@@ -1,5 +1,6 @@
 package tagcommands;
 import commands.TagCommand;
+import memento.*;
 import java.util.ArrayList;
 
 import gui.*;
@@ -14,14 +15,16 @@ public class AddListTag implements TagCommand{
 	int tabNum;
 	//a reference to the gui
 	EditorGUI gui;
+	TextState memento;
 	
-	public AddListTag(String tag, int tabNum, EditorGUI gui){
+	public AddListTag(String tag, int tabNum, EditorGUI gui, TextState memento){
 		this.tag=tag;
 		//update this with a popup in the future
 		this.numLi=3;
 		
 		this.tabNum=tabNum;
 		this.gui=gui;
+		this.memento=memento;
 	}
 	
 	public void execute(){
@@ -35,6 +38,11 @@ public class AddListTag implements TagCommand{
 		}
 		//add it to the textarea
 		gui.addText(list.toString(0), tabNum);
+	}
+	
+	public void undo(){
+		gui.replaceText(memento.getText(),tabNum);
+		gui.setCaret(memento.getCaret());
 	}
 	
 	//end class

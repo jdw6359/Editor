@@ -31,9 +31,11 @@ public class AddSimpleTag implements TagCommand{
 		BasicTag base=new BasicTag(tag,content);
 		//add it to the text area
 		gui.addText(base.toString(0),tabNum);
-		
-		
+	}
 	
+	public void undo(){
+		gui.replaceText(memento.getText(),tabNum);
+		gui.setCaret(memento.getCaret());
 	}
 	
 }

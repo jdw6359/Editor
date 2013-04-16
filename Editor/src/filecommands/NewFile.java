@@ -24,4 +24,6 @@ public class NewFile implements FileCommand{
 		gui.addPane();
 		
 	}
+	
+
 }

@@ -3,24 +3,20 @@ package textcommands;
 import commands.*;
 import gui.*;
 import editorproxy.*;
-
+import memento.*;
 
 public class CutText implements TextCommand{
 	
-	
-	
-	
-
 	String textBefore;
 	String textAfter;
 	String cut;
 	int tabNum;
 	EditorGUI gui;
 	EditorProxy proxy;
-	
+	TextState memento;
 	
 	public CutText(String textBefore,String textAfter,
-	String cut,int tabNum, EditorGUI gui,EditorProxy proxy){
+	String cut,int tabNum, EditorGUI gui,EditorProxy proxy,TextState memento){
 
 		this.textBefore=textBefore;
 		this.textAfter=textAfter;
@@ -28,6 +24,7 @@ public class CutText implements TextCommand{
 		this.tabNum=tabNum;
 		this.gui=gui;
 		this.proxy=proxy;
+		this.memento=memento;
 	}
 	
 	public void execute(){
@@ -37,6 +34,11 @@ public class CutText implements TextCommand{
 		
 		gui.replaceText(textBefore+textAfter,tabNum);
 		
+	}
+	
+	public void undo(){
+		gui.replaceText(memento.getText(),tabNum);
+		gui.setCaret(memento.getCaret());
 	}
 }
 

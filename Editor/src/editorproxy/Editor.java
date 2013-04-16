@@ -26,7 +26,6 @@ public class Editor{
 	 */
 	public Editor(){
 		stack=new MyStack();
-		
 	}
 	
 
@@ -41,6 +40,11 @@ public class Editor{
 		//logic to fire command object
 		fileCommand.execute();
 	}
+	
+	public void handleCommand(SourceCommand sourceCommand){
+		//fire command object
+		sourceCommand.execute();
+	}
 
 	/**
 	 * 
@@ -48,16 +52,6 @@ public class Editor{
 	 * be executed
 	 */
 	public void handleCommand(TagCommand tagCommand){
-		//TODO: create memento of current state
-		//state needed:
-		//text 
-		//caret position
-		
-		
-		//TODO: add memento to command object
-		
-		
-		
 		//Fire command object
 		tagCommand.execute();
 		//add command object to undo stack
@@ -74,6 +68,16 @@ public class Editor{
 		textCommand.execute();
 		//add command object to undo stack
 		stack.add(textCommand);
+	}
+
+	
+	public void respondToUndo(){
+		//will pop the top most command off of the stack, and 
+		//call its undo method
+		UndoableCommand undoable=stack.pop();
+		if(undoable!=null){
+			undoable.undo();
+		}
 	}
 	
 	public void setCut(String cut){

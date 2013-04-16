@@ -1,10 +1,10 @@
 package commands;
-import memento.*;
 
 
-public interface TextCommand extends Command{
+
+public interface TextCommand extends UndoableCommand{
 	
-	public void execute();
+	
 	
 	
 	

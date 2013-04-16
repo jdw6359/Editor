@@ -1,6 +1,6 @@
 package commands;
 
-public interface FileCommand extends Command{
+public interface SourceCommand extends Command{
 	
 	
 	

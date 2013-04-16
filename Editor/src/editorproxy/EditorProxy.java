@@ -1,10 +1,7 @@
 package editorproxy;
 
 
-import commands.FileCommand;
-
-import commands.TagCommand;
-import commands.TextCommand;
+import commands.*;
 
 
 public class EditorProxy implements EditorAbstraction{
@@ -58,6 +55,15 @@ public class EditorProxy implements EditorAbstraction{
 		if(validated){
 			//pass command off
 			editor.handleCommand(textCommand);
+		}else{
+			//dont pass command off
+		}
+	}
+	
+	public void handleCommand(SourceCommand sourceCommand){
+		if(validated){
+			//pass command off
+			editor.handleCommand(sourceCommand);
 		}else{
 			//dont pass command off
 		}

@@ -9,6 +9,7 @@ import javax.swing.*;
 import tagcommands.*;
 import filecommands.*;
 import textcommands.*;
+import sourcecommands.*;
 import editorproxy.*;
 import memento.*;
 
@@ -320,70 +321,87 @@ public class EditorGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //TODO add components for this
+    private void createAnchorLinkViewActionPerformed(java.awt.event.ActionEvent evt){
+    	//create command
+    	ViewSource source=new ViewSource("a",this.getText(),this);
+    	//pass command to editorproxy
+    	proxy.handleCommand(source);
+    }
     
     
+    //TODO add components for this
+    private void addAnchorTagActionPerformed(java.awt.event.ActionEvent evt){
+    	//create memento
+    	TextState memento=this.createMemento();
+    	//create command, pass memento to it
+    	AddSimpleTag addTag=new AddSimpleTag("a",tabbedPane.getSelectedIndex(),this,memento);
+    	//pass command off
+    	proxy.handleCommand(addTag);
+    }
     
-    
-    
+    //TODO add components for this
+    private void addImageTagActionPerformed(java.awt.event.ActionEvent evt){
+    	//create memento
+    	TextState memento=this.createMemento();
+    	//create command, pass memento to it
+    	AddSimpleTag addTag=new AddSimpleTag("img",tabbedPane.getSelectedIndex(),this,memento);
+    }
     
     private void addHeaderTagActionPerformed(java.awt.event.ActionEvent evt){
     	//create memento
-    	TextState memento=new TextState(this.getText(),this.getCaretPosition());
+    	TextState memento=this.createMemento();
     	//create command, pass memento to it
     	AddSimpleTag addTag=new AddSimpleTag("h1",tabbedPane.getSelectedIndex(),this,memento);
     	//pass command off
     	proxy.handleCommand(addTag);
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
     }
     
     
     private void addBoldTagActionPerformed(java.awt.event.ActionEvent evt){
     	
-    	TextState memento=new TextState(this.getText(),this.getCaretPosition());
+    	TextState memento=this.createMemento();
     	AddSimpleTag addTag=new AddSimpleTag("b",tabbedPane.getSelectedIndex(),this,memento);
     	proxy.handleCommand(addTag);
     }
     
     
     private void addItalicTagActionPerformed(java.awt.event.ActionEvent evt){
-    	TextState memento=new TextState(this.getText(),this.getCaretPosition());
+    	TextState memento=this.createMemento();
     	AddSimpleTag addTag=new AddSimpleTag("em",tabbedPane.getSelectedIndex(),this,memento);
     	proxy.handleCommand(addTag);
     }
     
-    //TODO
+    
     private void addTableTagActionPerformed(java.awt.event.ActionEvent evt){
+    	TextState memento=this.createMemento();
     	//instantiate an addTableTag
-    	AddTableTag addTag=new AddTableTag(tabbedPane.getSelectedIndex(),this);
+    	AddTableTag addTag=new AddTableTag(tabbedPane.getSelectedIndex(),this,memento);
     	//pass the command to the editor proxy
     	proxy.handleCommand(addTag);
     	
     }
     
-    //TODO
+    
     private void addNumberedTagActionPerformed(java.awt.event.ActionEvent evt){
-    	AddListTag addTag=new AddListTag("ol",tabbedPane.getSelectedIndex(),this);
+    	TextState memento=this.createMemento();
+    	AddListTag addTag=new AddListTag("ol",tabbedPane.getSelectedIndex(),this,memento);
     	proxy.handleCommand(addTag);
     	
     }
     
-    //TODO
+    
     private void addBulletedTagActionPerformed(java.awt.event.ActionEvent evt){
-    	AddListTag addTag=new AddListTag("ul",tabbedPane.getSelectedIndex(),this);
+    	TextState memento=this.createMemento();
+    	AddListTag addTag=new AddListTag("ul",tabbedPane.getSelectedIndex(),this,memento);
     	proxy.handleCommand(addTag);
     }
     
-    //TODO
+
     private void addDictionaryTagActionPerformed(java.awt.event.ActionEvent evt){
+    	TextState memento=this.createMemento();
     	//instantiate an addDictTag
-    	AddDictTag addTag=new AddDictTag(tabbedPane.getSelectedIndex(),this);
+    	AddDictTag addTag=new AddDictTag(tabbedPane.getSelectedIndex(),this,memento);
     	//pass the command to the editor proxy
     	proxy.handleCommand(addTag);
 
@@ -393,7 +411,7 @@ public class EditorGUI extends javax.swing.JFrame {
    
     
    
-    //TODO
+   
     private void cutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cutActionPerformed
     	//get the cut text
     	JScrollPane scroll=(JScrollPane) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex());
@@ -408,8 +426,10 @@ public class EditorGUI extends javax.swing.JFrame {
 		String textBefore=area.getText().substring(0,start);
 		//get textAfter
 		String textAfter=area.getText().substring(end,area.getText().length());
-    	//create CutText command object
-		CutText cut=new CutText(textBefore,textAfter,cutText,tabbedPane.getSelectedIndex(),this,proxy);
+    	//create memento
+		TextState memento=this.createMemento();
+		//create CutText command object
+		CutText cut=new CutText(textBefore,textAfter,cutText,tabbedPane.getSelectedIndex(),this,proxy,memento);
 		//pass it to the proxy
 		proxy.handleCommand(cut);
     	
@@ -451,12 +471,10 @@ public class EditorGUI extends javax.swing.JFrame {
         NewFile newfile=new NewFile(this);
         //pass command to proxy
         proxy.handleCommand(newfile);
-        
-        
-        
-       
     }//GEN-LAST:event_newFileActionPerformed
 
+    
+    
     private void FileMenuComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_FileMenuComponentAdded
         // NO IMPLEMENTATION NEEDED
     }//GEN-LAST:event_FileMenuComponentAdded
@@ -493,7 +511,7 @@ public class EditorGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_tabbedPaneComponentRemoved
 
     
-    //TODO
+  
     private void pasteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pasteActionPerformed
 
     	JScrollPane scroll=(JScrollPane) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex());
@@ -502,9 +520,10 @@ public class EditorGUI extends javax.swing.JFrame {
 		int start=area.getSelectionStart();
 		String textBefore=area.getText().substring(0,start);
 		String textAfter=area.getText().substring(start,area.getText().length());
-    	
+    	//create memento
+		TextState memento=this.createMemento();
     	//create object
-		PasteText paste=new PasteText(textBefore,textAfter,tabbedPane.getSelectedIndex(),this,proxy);
+		PasteText paste=new PasteText(textBefore,textAfter,tabbedPane.getSelectedIndex(),this,proxy,memento);
 		//pass it to proxy
     	proxy.handleCommand(paste);
     	
@@ -620,5 +639,18 @@ public class EditorGUI extends javax.swing.JFrame {
 		JViewport viewport=scroll.getViewport();
 		JTextArea area=(JTextArea)viewport.getView();
 		return area.getCaretPosition();
+	}
+
+	public void setCaret(int caret) {
+		int selected=tabbedPane.getSelectedIndex();
+		JScrollPane scroll=(JScrollPane)tabbedPane.getComponentAt(selected);
+		JViewport viewport=scroll.getViewport();
+		JTextArea area=(JTextArea)viewport.getView();
+		area.setCaretPosition(caret);
+		
+	}
+	
+	public TextState createMemento(){
+		return new TextState(this.getText(),this.getCaretPosition());
 	}
 }

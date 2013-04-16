@@ -1,10 +1,10 @@
 package commands;
-import memento.*;
 
 
-public interface TagCommand extends Command{
+
+public interface TagCommand extends UndoableCommand{
 	
-	public void execute();
+
 	
 	
 	

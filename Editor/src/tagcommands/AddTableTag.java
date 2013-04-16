@@ -4,7 +4,7 @@ import gui.*;
 import java.util.ArrayList;
 
 import constructs.*;
-
+import memento.*;
 
 public class AddTableTag implements TagCommand{
 	
@@ -14,9 +14,10 @@ public class AddTableTag implements TagCommand{
 	int tabNum;
 	//a referance to the gui
 	EditorGUI gui;
+	TextState memento;
 	
 	
-	public AddTableTag(int tabNum,EditorGUI gui){
+	public AddTableTag(int tabNum,EditorGUI gui,TextState memento){
 		this.tag="table";
 		//update this with a popup in the future
 		this.numTr=3;
@@ -24,6 +25,7 @@ public class AddTableTag implements TagCommand{
 		
 		this.tabNum=tabNum;
 		this.gui=gui;
+		this.memento=memento;
 	}
 	
 	public void execute(){
@@ -43,6 +45,10 @@ public class AddTableTag implements TagCommand{
 		}
 		//add it to the textarea
 		gui.addText(table.toString(0),tabNum);
-		
+	}
+	
+	public void undo(){
+		gui.replaceText(memento.getText(), tabNum);
+		gui.setCaret(memento.getCaret());
 	}
 }

@@ -13,5 +13,13 @@ public class TextState{
 		this.caretPosition=caretPosition;
 	}
 	
+	public String getText(){
+		return text;
+	}
+	
+	public int getCaret(){
+		return caretPosition;
+	}
+	
 	
 }
