@@ -20,8 +20,8 @@ public class NewFile implements FileCommand{
 	//create a new canvas, and possibly have it start with the basic 
 	//html constructs
 	
-	
-		gui.addPane();
+	String tabName = "Default.html";
+		gui.addPane(tabName);
 		
 	}
 	

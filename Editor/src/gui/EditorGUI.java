@@ -447,13 +447,11 @@ public class EditorGUI extends javax.swing.JFrame {
 
     private void openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileActionPerformed
         
-        JFileChooser chooser = new JFileChooser();
+    	//create NewFile command
+        OpenFile openfile=new OpenFile(this);
+        //pass command to proxy
+        proxy.handleCommand(openfile);
     
-    int returnVal = chooser.showOpenDialog(null);
-    if(returnVal == JFileChooser.APPROVE_OPTION) {
-       System.out.println("Opening file " +
-            chooser.getSelectedFile().getName());
-    }
     }//GEN-LAST:event_openFileActionPerformed
 
     private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
@@ -599,14 +597,14 @@ public class EditorGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem openFile;
     private javax.swing.JMenuItem paste;
     private javax.swing.JMenuItem saveFile;
-    private javax.swing.JTabbedPane tabbedPane;
+    public javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JMenuItem validateHTML;
     // End of variables declaration//GEN-END:variables
 	
-	public void addPane(){
+	public void addPane(String tabName){
     	JTextArea area=new JTextArea();
     	JScrollPane scroll=new JScrollPane(area,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-    	tabbedPane.addTab("Default.html",scroll);
+    	tabbedPane.addTab(tabName,scroll);
     	
     }
 	
