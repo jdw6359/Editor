@@ -1,11 +1,14 @@
 package filecommands;
 
 import commands.FileCommand;
-
+import gui.*;
+import javax.swing.*;
+import java.io.*;
 public class SaveFile implements FileCommand{
 	
-	public SaveFile(){
-		
+	EditorGUI gui;
+	public SaveFile(EditorGUI gui){
+		this.gui = gui;
 	}
 	
 	public void execute(){

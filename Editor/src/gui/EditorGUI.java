@@ -456,13 +456,11 @@ public class EditorGUI extends javax.swing.JFrame {
 
     private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
        
-        JFileChooser chooser = new JFileChooser();
+    	//create NewFile command
+        SaveFile savefile=new SaveFile(this);
+        //pass command to proxy
+        proxy.handleCommand(savefile);
     
-    int returnVal = chooser.showSaveDialog(null);
-    if(returnVal == JFileChooser.APPROVE_OPTION) {
-       System.out.println("Saving file " +
-            chooser.getSelectedFile().getName());
-    }//GEN-LAST:event_saveFileActionPerformed
     }
     private void newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileActionPerformed
         //create NewFile command
