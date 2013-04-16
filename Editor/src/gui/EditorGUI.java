@@ -4,6 +4,9 @@
  */
 package gui;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 import tagcommands.*;
@@ -60,6 +63,8 @@ public class EditorGUI extends javax.swing.JFrame {
         insertTag = new javax.swing.JMenu();
         insertHeaderTag = new javax.swing.JMenuItem();
         insertBoldTag = new javax.swing.JMenuItem();
+        JMenuItem insertImageTag = new javax.swing.JMenuItem();
+        JMenuItem insertAnchorTag = new javax.swing.JMenuItem();
         insertItalicTag = new javax.swing.JMenuItem();
         insertTableTag = new javax.swing.JMenuItem();
         insertListTag = new javax.swing.JMenu();
@@ -188,6 +193,15 @@ public class EditorGUI extends javax.swing.JFrame {
 
         insertTag.setText("Insert Tag");
 
+        insertAnchorTag.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.ALT_MASK));
+        insertAnchorTag.setText("Anchor");
+        insertTag.add(insertAnchorTag);
+        insertAnchorTag.addActionListener(new java.awt.event.ActionListener(){
+        	public void actionPerformed(java.awt.event.ActionEvent evt){
+        		addAnchorTagActionPerformed(evt);
+        	}
+        });
+        
         insertHeaderTag.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.ALT_MASK));
         insertHeaderTag.setText("Header");
         insertTag.add(insertHeaderTag);
@@ -206,6 +220,15 @@ public class EditorGUI extends javax.swing.JFrame {
         	}
         });
 
+        insertImageTag.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.ALT_MASK));
+        insertImageTag.setText("Image");
+        insertTag.add(insertImageTag);
+        insertImageTag.addActionListener(new java.awt.event.ActionListener(){
+        	public void actionPerformed(java.awt.event.ActionEvent evt){
+        		addImageTagActionPerformed(evt);
+        	}
+        });
+        
         insertItalicTag.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_MASK));
         insertItalicTag.setText("Italic");
         insertTag.add(insertItalicTag);
@@ -332,20 +355,28 @@ public class EditorGUI extends javax.swing.JFrame {
     
     //TODO add components for this
     private void addAnchorTagActionPerformed(java.awt.event.ActionEvent evt){
+    	ArrayList<String> data = getAnchorData();
+    	
+    	String URL = " href=\""+data.get(0)+"\"";
+    	String linkText = data.get(1);
     	//create memento
     	TextState memento=this.createMemento();
     	//create command, pass memento to it
-    	AddSimpleTag addTag=new AddSimpleTag("a",tabbedPane.getSelectedIndex(),this,memento);
+    	AddAnchorTag addTag=new AddAnchorTag(URL, linkText, tabbedPane.getSelectedIndex(),this,memento);
     	//pass command off
     	proxy.handleCommand(addTag);
     }
     
     //TODO add components for this
     private void addImageTagActionPerformed(java.awt.event.ActionEvent evt){
+    	
+    	ArrayList<String> imgData = getImgData();
+    	
     	//create memento
     	TextState memento=this.createMemento();
     	//create command, pass memento to it
-    	AddSimpleTag addTag=new AddSimpleTag("img",tabbedPane.getSelectedIndex(),this,memento);
+    	AddImageTag addTag=new AddImageTag(imgData.get(0), imgData.get(1), tabbedPane.getSelectedIndex(),this,memento);
+    	proxy.handleCommand(addTag);
     }
     
     private void addHeaderTagActionPerformed(java.awt.event.ActionEvent evt){
@@ -648,5 +679,35 @@ public class EditorGUI extends javax.swing.JFrame {
 	
 	public TextState createMemento(){
 		return new TextState(this.getText(),this.getCaretPosition());
+	}
+	
+	public ArrayList<String> getImgData(){
+		String src = "";
+		String imgName = "";
+		ArrayList<String> imgInfo = new ArrayList<String>();
+		JFileChooser chooser = new JFileChooser();
+		int returnVal = chooser.showOpenDialog(null);
+		
+		 if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File file = chooser.getSelectedFile();
+			src = file.getPath();
+			imgName = file.getName();
+		 }
+		 imgInfo.add(src);
+		 imgInfo.add(imgName);
+		return imgInfo;
+	}
+	
+	public ArrayList<String> getAnchorData(){
+		String url = "";
+		String text = "";
+		ArrayList<String> anchorData = new ArrayList<String>();
+		
+		url = JOptionPane.showInputDialog("Enter URL");
+		text = JOptionPane.showInputDialog("Enter link text");
+		anchorData.add(url);
+		anchorData.add(text);
+		
+		return anchorData;
 	}
 }
