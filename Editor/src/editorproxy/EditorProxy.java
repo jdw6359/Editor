@@ -16,8 +16,6 @@ public class EditorProxy implements EditorAbstraction{
 	
 	
 	public EditorProxy(){
-		
-		
 	}
 	
 	/**
@@ -59,15 +57,7 @@ public class EditorProxy implements EditorAbstraction{
 			//dont pass command off
 		}
 	}
-	
-	public void handleCommand(SourceCommand sourceCommand){
-		if(validated){
-			//pass command off
-			editor.handleCommand(sourceCommand);
-		}else{
-			//dont pass command off
-		}
-	}
+
 	
 	public void setCut(String cut){
 		editor.setCut(cut);

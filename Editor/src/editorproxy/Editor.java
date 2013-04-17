@@ -41,10 +41,6 @@ public class Editor{
 		fileCommand.execute();
 	}
 	
-	public void handleCommand(SourceCommand sourceCommand){
-		//fire command object
-		sourceCommand.execute();
-	}
 
 	/**
 	 * 

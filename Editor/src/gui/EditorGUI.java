@@ -13,10 +13,11 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import parser.LinkView;
+
 import tagcommands.*;
 import filecommands.*;
 import textcommands.*;
-import sourcecommands.*;
 import editorproxy.*;
 import memento.*;
 
@@ -70,6 +71,7 @@ public class EditorGUI extends javax.swing.JFrame {
         JMenuItem showImage = new javax.swing.JMenuItem();
         JMenuItem insertImageTag = new javax.swing.JMenuItem();
         JMenuItem insertAnchorTag = new javax.swing.JMenuItem();
+        JMenuItem insertLinkView = new javax.swing.JMenuItem();
         insertItalicTag = new javax.swing.JMenuItem();
         insertTableTag = new javax.swing.JMenuItem();
         insertListTag = new javax.swing.JMenu();
@@ -206,6 +208,15 @@ public class EditorGUI extends javax.swing.JFrame {
         });
         EditMenu.add(showImage);
         
+        insertLinkView.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        insertLinkView.setText("Link View");
+        insertLinkView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addLinkViewActionPerformed(evt);
+            }
+        });
+        EditMenu.add(insertLinkView);
+        
         insertTag.setText("Insert Tag");
 
         insertAnchorTag.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.ALT_MASK));
@@ -252,6 +263,8 @@ public class EditorGUI extends javax.swing.JFrame {
         		addItalicTagActionPerformed(evt);
         	}
         });
+        
+               
 
         insertTableTag.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.ALT_MASK));
         insertTableTag.setText("Table");
@@ -382,13 +395,7 @@ public class EditorGUI extends javax.swing.JFrame {
 		} catch (IOException e) {}
     }
     
-    //TODO add components for this
-    private void createAnchorLinkViewActionPerformed(java.awt.event.ActionEvent evt){
-    	//create command
-    	ViewSource source=new ViewSource("a",this.getText(),this);
-    	//pass command to editorproxy
-    	proxy.handleCommand(source);
-    }
+   
     
     
     //TODO add components for this
@@ -403,6 +410,25 @@ public class EditorGUI extends javax.swing.JFrame {
     	AddAnchorTag addTag=new AddAnchorTag(URL, linkText, tabbedPane.getSelectedIndex(),this,memento);
     	//pass command off
     	proxy.handleCommand(addTag);
+    }
+    
+    private void addLinkViewActionPerformed(java.awt.event.ActionEvent evt){
+    	LinkView linkView = new LinkView(getText());
+    	ArrayList<String> links = linkView.getLinks();
+    	int tabNum = tabbedPane.getSelectedIndex();
+    	
+    	JFrame imgFrame = new JFrame();
+	    JTextPane textPane = new JTextPane();
+	    textPane.setEditable(false);
+	    imgFrame.add(textPane);
+	    imgFrame.setSize( 500, 300);
+        imgFrame.setVisible(true);
+        
+    	for(String link : links){
+    		link = link+"\n";
+    		textPane.setText(textPane.getText()+link);
+    	}
+    	
     }
     
     //TODO add components for this

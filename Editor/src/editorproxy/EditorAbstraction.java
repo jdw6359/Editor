@@ -12,6 +12,5 @@ public interface EditorAbstraction{
 	public void handleCommand(TagCommand tagCommand);
 	public void handleCommand(FileCommand fileCommand);
 	public void handleCommand(TextCommand textCommand);
-	public void handleCommand(SourceCommand sourceCommand);
 	
 }
