@@ -4,9 +4,13 @@
  */
 package gui;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import tagcommands.*;
@@ -63,6 +67,7 @@ public class EditorGUI extends javax.swing.JFrame {
         insertTag = new javax.swing.JMenu();
         insertHeaderTag = new javax.swing.JMenuItem();
         insertBoldTag = new javax.swing.JMenuItem();
+        JMenuItem showImage = new javax.swing.JMenuItem();
         JMenuItem insertImageTag = new javax.swing.JMenuItem();
         JMenuItem insertAnchorTag = new javax.swing.JMenuItem();
         insertItalicTag = new javax.swing.JMenuItem();
@@ -113,6 +118,7 @@ public class EditorGUI extends javax.swing.JFrame {
                 autoIndentationButtonActionPerformed(evt);
             }
         });
+        
 
         tabbedPane.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentRemoved(java.awt.event.ContainerEvent evt) {
@@ -191,6 +197,15 @@ public class EditorGUI extends javax.swing.JFrame {
         });
         EditMenu.add(paste);
 
+        showImage.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        showImage.setText("Show Image");
+        showImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showImageActionPerformed(evt);
+            }
+        });
+        EditMenu.add(showImage);
+        
         insertTag.setText("Insert Tag");
 
         insertAnchorTag.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.ALT_MASK));
@@ -344,6 +359,29 @@ public class EditorGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    private void showImageActionPerformed(java.awt.event.ActionEvent evt){
+    	// gets selected URL from tabbed pane, and open the file.
+    	String url = "";
+    	int selected=tabbedPane.getSelectedIndex();
+		JScrollPane scroll=(JScrollPane)tabbedPane.getComponentAt(selected);
+		JViewport viewport=scroll.getViewport();
+		JTextArea area=(JTextArea)viewport.getView();
+		url = area.getSelectedText();
+		
+	
+		try {
+			File sourceimage = new File(url);
+			Image img = ImageIO.read(sourceimage);
+		    JFrame imgFrame = new JFrame(url);
+		    JLabel imgLabel = new JLabel(new ImageIcon(img));
+		    
+		    imgFrame.setSize( img.getWidth(null), img.getHeight(null));
+		    imgFrame.add(imgLabel);
+	        imgFrame.setVisible(true);
+		} catch (IOException e) {}
+    }
+    
     //TODO add components for this
     private void createAnchorLinkViewActionPerformed(java.awt.event.ActionEvent evt){
     	//create command
